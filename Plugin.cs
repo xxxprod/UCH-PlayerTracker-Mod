@@ -93,7 +93,7 @@ public class Plugin : BaseUnityPlugin
 
                 positions.Enqueue(pos);
 
-                if (positions.Count > _trackingLength.Value)
+                while (positions.Count > _trackingLength.Value)
                     positions.Dequeue();
 
                 renderer.positionCount = positions.Count;
@@ -129,7 +129,6 @@ public class Plugin : BaseUnityPlugin
                 }
 
                 renderer.startColor = gamePlayer.PlayerColor;
-                //renderer.material.color = gamePlayer.PlayerColor;
                 yield return (gamePlayer.CharacterInstance, positions, renderer);
             }
         }
