@@ -1,7 +1,7 @@
 # UCH-PlayerTracker-Mod
 This mod draws a line behind the character in its color.
 
-![alt text](Screenshots\PlayerTrackerInLobby.png "Title")
+![Screenshot](Screenshots/PlayerTrackerInLobby.png)
 
 ## Installation
 BepInEx v5 needs to be installed and the mod must be placed in the **%UCHRoot%\BepInEx\plugins** folder.
