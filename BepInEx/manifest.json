@@ -1,6 +1,6 @@
 {
     "name": "PlayerTracker",
-    "version_number": "1.0.3",
+    "version_number": "1.0.4",
     "website_url": "https://github.com/xxxprod/UCH-PlayerTracker-Mod",
     "description": "This Mod draws a line on each players path to visualize their movements.",
     "dependencies": [

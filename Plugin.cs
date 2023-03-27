@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using BepInEx;
 using BepInEx.Configuration;
+using GameEvent;
 using UnityEngine;
 namespace UCHPlayerTrackerMod;
 
 [BepInPlugin(PluginInfo.PLUGIN_GUID, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
-public class Plugin : BaseUnityPlugin
+public class Plugin : BaseUnityPlugin, IGameEventListener
 {
     private int framesLeft;
 
@@ -35,9 +36,21 @@ public class Plugin : BaseUnityPlugin
         {
             _lines[i] = (new Queue<Vector3>(), CreateLineRenderer());
         }
+        
+        GameEventManager.ChangeListener<LevelResetEvent>(this, true);
 
         // Plugin startup logic
         Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} is loaded!");
+    }
+
+    public void handleEvent(GameEvent.GameEvent e)
+    {
+        switch (e)
+        {
+            case LevelResetEvent:
+                ClearLines();
+                break;
+        }
     }
 
     private void ClearLines()
@@ -71,7 +84,6 @@ public class Plugin : BaseUnityPlugin
         lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
         lineRenderer.startWidth = _lineWidthEnd.Value;
         lineRenderer.endWidth = _lineWidthStart.Value;
-        lineRenderer.endColor = Color.white;
         lineRenderer.useWorldSpace = true;
         return lineRenderer;
     }
@@ -127,8 +139,9 @@ public class Plugin : BaseUnityPlugin
                     renderer.SetPositions(positions.ToArray());
                     continue;
                 }
-
+                
                 renderer.startColor = gamePlayer.PlayerColor;
+                renderer.endColor = gamePlayer.PlayerColor;
                 yield return (gamePlayer.CharacterInstance, positions, renderer);
             }
         }
@@ -146,8 +159,9 @@ public class Plugin : BaseUnityPlugin
                     renderer.SetPositions(positions.ToArray());
                     continue;
                 }
-
-                renderer.material.color = lobbyPlayer.PlayerColor;
+                
+                renderer.startColor = lobbyPlayer.PlayerColor;
+                renderer.endColor = lobbyPlayer.PlayerColor;
                 yield return (lobbyPlayer.CharacterInstance, positions, renderer);
             }
         }
